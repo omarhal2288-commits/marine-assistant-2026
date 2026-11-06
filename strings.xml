@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">مساعد مارين الذكي</string>
+    <string name="accessibility_description">يسمح بقراءة النص الظاهر وتنفيذ أوامر مساعدة بعد تأكيدك.</string>
+</resources>
