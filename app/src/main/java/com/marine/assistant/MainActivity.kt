@@ -195,13 +195,13 @@ class MainActivity : Activity() {
     }
     private fun exportBackup() {
         val text = buildString {
-            append("نسخة احتياطية — مساعد مارين الذكي\\n\\n")
-            append("العملاء\\n")
-            db.rows("SELECT id,name,phone,notes FROM customers ORDER BY id").forEach { append(it.joinToString(" | ")).append("\\n") }
-            append("\\nالطلبات\\n")
-            db.rows("SELECT id,customer,details,amount,status,created_at FROM orders ORDER BY id").forEach { append(it.joinToString(" | ")).append("\\n") }
-            append("\\nالحسابات\\n")
-            db.rows("SELECT id,title,kind,amount,notes,created_at FROM entries ORDER BY id").forEach { append(it.joinToString(" | ")).append("\\n") }
+            append("نسخة احتياطية — مساعد مارين الذكي\n\n")
+            append("العملاء\n")
+            db.rows("SELECT id,name,phone,notes FROM customers ORDER BY id").forEach { append(it.joinToString(" | ")).append("\n") }
+            append("\nالطلبات\n")
+            db.rows("SELECT id,customer,details,amount,status,created_at FROM orders ORDER BY id").forEach { append(it.joinToString(" | ")).append("\n") }
+            append("\nالحسابات\n")
+            db.rows("SELECT id,title,kind,amount,notes,created_at FROM entries ORDER BY id").forEach { append(it.joinToString(" | ")).append("\n") }
         }
         val send = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
