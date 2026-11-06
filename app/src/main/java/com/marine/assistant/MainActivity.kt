@@ -92,6 +92,7 @@ class MainActivity : Activity() {
         sectionButton(body, "إدارة العملاء") { showCustomers() }
         sectionButton(body, "إدارة الطلبات") { showOrders() }
         sectionButton(body, "الحسابات والإيرادات والمصروفات") { showAccounts() }
+        sectionButton(body, "تصدير نسخة احتياطية من البيانات") { exportBackup() }
         addText(body, "التطبيقات المرتبطة", 18f, pink)
         apps.forEach { (label, pkg) -> sectionButton(body, "فتح $label") { openApp(label, pkg) } }
         addText(body, "ملاحظة: أزرار المنصات تفتح تطبيقاتها الرسمية فقط. لا يوجد حالياً صندوق رسائل موحد أو نشر تلقائي؛ ذلك يتطلب موافقات وواجهات API رسمية من كل منصة.", 12f, ink)
@@ -192,6 +193,24 @@ class MainActivity : Activity() {
         val t = TextView(this).apply { text = value; textSize = size; setTextColor(color); setPadding(6, 8, 6, 8) }
         parent.addView(t, match())
     }
+    private fun exportBackup() {
+        val text = buildString {
+            append("نسخة احتياطية — مساعد مارين الذكي\\n\\n")
+            append("العملاء\\n")
+            db.rows("SELECT id,name,phone,notes FROM customers ORDER BY id").forEach { append(it.joinToString(" | ")).append("\\n") }
+            append("\\nالطلبات\\n")
+            db.rows("SELECT id,customer,details,amount,status,created_at FROM orders ORDER BY id").forEach { append(it.joinToString(" | ")).append("\\n") }
+            append("\\nالحسابات\\n")
+            db.rows("SELECT id,title,kind,amount,notes,created_at FROM entries ORDER BY id").forEach { append(it.joinToString(" | ")).append("\\n") }
+        }
+        val send = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "نسخة احتياطية — معمل مارين")
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        startActivity(Intent.createChooser(send, "حفظ أو إرسال النسخة الاحتياطية"))
+    }
+
     private fun openApp(label: String, packageName: String) {
         val launch: Intent? = packageManager.getLaunchIntentForPackage(packageName)
         if (launch == null) toast("التطبيق غير مثبت أو لا يمكن فتحه: $label") else startActivity(launch)
