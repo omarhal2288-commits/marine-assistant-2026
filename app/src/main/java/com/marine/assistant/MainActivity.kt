@@ -12,13 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 
-private class MarinDb(context: android.content.Context) : SQLiteOpenHelper(context, "marin_lab.db", null, 1) {
+private class MarinDb(context: android.content.Context) : SQLiteOpenHelper(context, "marin_lab.db", null, 2) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE customers(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, phone TEXT NOT NULL, notes TEXT)")
-        db.execSQL("CREATE TABLE orders(id INTEGER PRIMARY KEY AUTOINCREMENT, customer TEXT NOT NULL, details TEXT NOT NULL, amount REAL NOT NULL, status TEXT NOT NULL, created_at TEXT DEFAULT CURRENT_TIMESTAMP)")
+        db.execSQL("CREATE TABLE orders(id INTEGER PRIMARY KEY AUTOINCREMENT, customer TEXT NOT NULL, details TEXT NOT NULL, amount REAL NOT NULL, status TEXT NOT NULL, paid_amount REAL NOT NULL DEFAULT 0, created_at TEXT DEFAULT CURRENT_TIMESTAMP)")
         db.execSQL("CREATE TABLE entries(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, kind TEXT NOT NULL, amount REAL NOT NULL, notes TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP)")
     }
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2) db.execSQL("ALTER TABLE orders ADD COLUMN paid_amount REAL NOT NULL DEFAULT 0")
+    }
     fun add(table: String, values: ContentValues) = writableDatabase.insert(table, null, values)
     fun rows(sql: String): List<List<String>> {
         val out = mutableListOf<List<String>>()
@@ -183,6 +185,25 @@ class MainActivity : Activity() {
     private fun sectionButton(parent: LinearLayout, label: String, action: () -> Unit) {
         val b = Button(this).apply { text = label; setTextColor(0xFFFFFFFF.toInt()); setBackgroundColor(pink); setOnClickListener { action() } }
         val p = LinearLayout.LayoutParams(-1, ViewGroup.LayoutParams.WRAP_CONTENT); p.setMargins(0, 5, 0, 5); parent.addView(b, p)
+    }
+    private fun actionCard(parent: LinearLayout, heading: String, detail: String): LinearLayout {
+        val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(14, 12, 14, 12); setBackgroundColor(pale) }
+        addText(box, heading, 16f, pink)
+        addText(box, detail + "\\n(اضغط مطولاً للحذف)", 13f, ink)
+        val p = LinearLayout.LayoutParams(-1, ViewGroup.LayoutParams.WRAP_CONTENT)
+        p.setMargins(0, 6, 0, 6)
+        parent.addView(box, p)
+        return box
+    }
+    private fun confirmDelete(title: String, table: String, id: String) {
+        AlertDialog.Builder(this).setTitle(title)
+            .setMessage("لا يمكن التراجع عن الحذف. هل تريد المتابعة؟")
+            .setNegativeButton("إلغاء", null)
+            .setPositiveButton("حذف") { _, _ ->
+                val allowed = setOf("customers", "orders", "entries")
+                if (table in allowed) db.writableDatabase.delete(table, "id=?", arrayOf(id))
+                when(table) { "customers" -> showCustomers(); "orders" -> showOrders(); else -> showAccounts() }
+            }.show()
     }
     private fun card(parent: LinearLayout, heading: String, detail: String) {
         val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(14, 12, 14, 12); setBackgroundColor(pale) }
