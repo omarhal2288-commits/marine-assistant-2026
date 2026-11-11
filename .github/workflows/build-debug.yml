@@ -3,7 +3,7 @@ name: Build Marine Assistant APK
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: ['**']
     paths:
       - '**/*.kt'
       - '**/*.xml'
@@ -37,12 +37,12 @@ jobs:
           sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Build debug APK
-        run: gradle --no-daemon assembleDebug
+        run: gradle --no-daemon :app:assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: marine-assistant-debug-apk
+          name: marine-assistant-safe-review-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
