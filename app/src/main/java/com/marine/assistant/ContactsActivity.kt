@@ -117,11 +117,11 @@ class ContactsActivity : Activity() {
             card.addView(text, match())
             val actions = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
             val edit = Button(this).apply {
-                text = "تعديل"
+                this.text = "تعديل"
                 setOnClickListener { showCustomerDialog(customer) }
             }
             val delete = Button(this).apply {
-                text = "حذف"
+                this.text = "حذف"
                 setOnClickListener { confirmDelete(customer) }
             }
             actions.addView(edit, LinearLayout.LayoutParams(0, -2, 1f))
