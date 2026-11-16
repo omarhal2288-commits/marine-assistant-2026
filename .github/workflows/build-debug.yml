@@ -2,8 +2,11 @@ name: Build Marine Assistant APK
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: ['**']
     paths:
       - '**/*.kt'
       - '**/*.xml'
@@ -26,23 +29,23 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      - name: Install Android SDK packages
-        run: |
-          yes | sdkmanager --licenses
-          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
-
       - name: Build debug APK
-        run: gradle --no-daemon assembleDebug
+        run: gradle --no-daemon :app:assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: marine-assistant-debug-apk
+          name: marine-assistant-safe-review-apk
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
