@@ -61,6 +61,23 @@ class MainActivity : Activity() {
         contactParams.setMargins(0, 6, 0, 12)
         content.addView(contactsButton, contactParams)
 
+        listOf(
+            "إدارة الطلبات" to OrdersActivity::class.java,
+            "ملخص المبيعات" to SalesActivity::class.java,
+            "متابعة الحسابات" to AccountsStatusActivity::class.java
+        ).forEach { (label, screen) ->
+            val button = Button(this).apply {
+                text = label
+                textSize = 16f
+                setTextColor(0xFFFFFFFF.toInt())
+                setBackgroundColor(0xFF8E2859.toInt())
+                setOnClickListener { startActivity(Intent(this@MainActivity, screen)) }
+            }
+            val params = LinearLayout.LayoutParams(-1, ViewGroup.LayoutParams.WRAP_CONTENT)
+            params.setMargins(0, 6, 0, 6)
+            content.addView(button, params)
+        }
+
         apps.forEach { (label, packageName) ->
             val button = Button(this).apply {
                 text = label
