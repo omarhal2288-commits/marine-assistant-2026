@@ -1,6 +1,7 @@
 package com.marine.assistant
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.ViewGroup
@@ -41,13 +42,25 @@ class MainActivity : Activity() {
         }
         content.addView(title, match())
         val note = TextView(this).apply {
-            text = "نسخة تشغيل آمنة: تفتح التطبيقات المثبتة فقط، ولا تقرأ الشاشة أو تنقر أو تكتب داخل التطبيقات."
+            text = "إدارة العملاء محفوظة محلياً على هذا الهاتف. ربط المنصات يتم لاحقاً عبر الطرق الرسمية."
             textSize = 14f
             setTextColor(0xFFFFFFFF.toInt())
             gravity = Gravity.CENTER
             setPadding(0, 8, 0, 18)
         }
         content.addView(note, match())
+
+        val contactsButton = Button(this).apply {
+            text = "إدارة العملاء والطلبات"
+            textSize = 16f
+            setTextColor(0xFFFFFFFF.toInt())
+            setBackgroundColor(0xFFB83270.toInt())
+            setOnClickListener { startActivity(Intent(this@MainActivity, ContactsActivity::class.java)) }
+        }
+        val contactParams = LinearLayout.LayoutParams(-1, ViewGroup.LayoutParams.WRAP_CONTENT)
+        contactParams.setMargins(0, 6, 0, 12)
+        content.addView(contactsButton, contactParams)
+
         apps.forEach { (label, packageName) ->
             val button = Button(this).apply {
                 text = label
