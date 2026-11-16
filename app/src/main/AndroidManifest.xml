@@ -13,6 +13,9 @@
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:supportsRtl="true">
         <activity android:name=".ContactsActivity" android:exported="false" />
+        <activity android:name=".OrdersActivity" android:exported="false" />
+        <activity android:name=".SalesActivity" android:exported="false" />
+        <activity android:name=".AccountsStatusActivity" android:exported="false" />
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
