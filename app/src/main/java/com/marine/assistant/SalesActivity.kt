@@ -63,11 +63,11 @@ class SalesActivity : Activity() {
         addMetric(content, "طلبات تم تسليمها", delivered.toString())
         addMetric(content, "طلبات قيد المتابعة", active.toString())
         addMetric(content, "طلبات ملغاة", cancelled.toString())
-        addMetric(content, "قيمة الطلبات المسلّمة", formatAmount(deliveredTotal))
-        addMetric(content, "قيمة الطلبات غير المسلّمة", formatAmount(activeTotal))
+        addMetric(content, "قيمة المبيعات (المسلّم فقط)", formatAmount(deliveredTotal))
+        addMetric(content, "قيمة الطلبات قيد المتابعة", formatAmount(activeTotal))
 
         content.addView(TextView(this).apply {
-            text = "يُحتسب إجمالي المبيعات من الطلبات التي حالتها «تم التسليم» فقط. الطلبات الملغاة لا تدخل في قيمة المبيعات. هذه أرقام محلية محفوظة داخل التطبيق وليست مرتبطة بحساب بنكي أو منصة دفع."
+            text = "تُحسب المبيعات من الطلبات التي حالتها «تم التسليم» فقط. الطلبات قيد المتابعة والملغاة لا تدخل في قيمة المبيعات. هذه أرقام محلية وليست حساب أرباح أو مصروفات، ولا ترتبط بحساب بنكي أو منصة دفع."
             textSize = 14f
             setTextColor(0xFFFFD6E7.toInt())
             setPadding(4, 18, 4, 20)
