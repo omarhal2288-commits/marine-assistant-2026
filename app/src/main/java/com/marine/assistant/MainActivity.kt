@@ -42,7 +42,7 @@ class MainActivity : Activity() {
         }
         content.addView(title, match())
         val note = TextView(this).apply {
-            text = "إدارة العملاء محفوظة محلياً على هذا الهاتف. ربط المنصات يتم لاحقاً عبر الطرق الرسمية."
+            text = "دفتر العملاء والطلبات والمبيعات محفوظ محلياً على هذا الهاتف. ربط المنصات يتم لاحقاً عبر الطرق الرسمية."
             textSize = 14f
             setTextColor(0xFFFFFFFF.toInt())
             gravity = Gravity.CENTER
@@ -51,7 +51,7 @@ class MainActivity : Activity() {
         content.addView(note, match())
 
         val contactsButton = Button(this).apply {
-            text = "إدارة العملاء والطلبات"
+            text = "دفتر العملاء"
             textSize = 16f
             setTextColor(0xFFFFFFFF.toInt())
             setBackgroundColor(0xFFB83270.toInt())
